@@ -4,18 +4,25 @@ using PC2.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Identity
-builder.Services.AddDefaultIdentity<IdentityUser>(options => 
+builder.Services.AddDefaultIdentity<IdentityUser>(options =>
 {
     options.SignIn.RequireConfirmedAccount = false;
 })
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+.AddEntityFrameworkStores<ApplicationDbContext>();
 
-// MVC
+
+builder.Services.AddDistributedMemoryCache();
+
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
@@ -27,19 +34,19 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseStaticFiles(); // faltaba
+app.UseStaticFiles();
 
 app.UseRouting();
 
-// Autenticación y autorización
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Rutas
+app.UseSession();
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Inmuebles}/{action=Index}/{id?}");
 
-app.MapRazorPages(); // necesario para Identity
+app.MapRazorPages();
 
 app.Run();
