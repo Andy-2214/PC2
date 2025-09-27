@@ -1,0 +1,27 @@
+@model PC2.Models.Inmueble
+
+@{
+    ViewData["Title"] = "Detalles del Inmueble";
+}
+
+<h1>@Model.Titulo</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <img src="@Model.Imagen" alt="@Model.Titulo" class="img-fluid rounded shadow" />
+    </div>
+    <div class="col-md-6">
+        <h3 class="text-primary fw-bold">@Model.Precio.ToString("C")</h3>
+        <p><strong>Ciudad:</strong> @Model.Ciudad</p>
+        <p><strong>Dirección:</strong> @Model.Direccion</p>
+        <p><strong>Metros cuadrados:</strong> @Model.MetrosCuadrados m²</p>
+        <p><strong>Dormitorios:</strong> @Model.Dormitorios</p>
+        <p><strong>Baños:</strong> @Model.Banos</p>
+        <p><strong>Tipo:</strong> @Model.Tipo</p>
+
+        <a asp-action="Index" class="btn btn-secondary">⬅ Volver</a>
+        <a asp-controller="Visitas" asp-action="Create" asp-route-inmuebleId="@Model.Id" class="btn btn-success">
+            📅 Agendar Visita
+        </a>
+    </div>
+</div>
