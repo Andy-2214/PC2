@@ -1,0 +1,45 @@
+@model PC2.Models.Visita
+@{
+    ViewData["Title"] = "Agendar Visita";
+    var inmueble = ViewBag.Inmueble as PC2.Models.Inmueble;
+}
+
+<h2>Agendar visita en @inmueble?.Titulo</h2>
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+
+<form asp-action="Create" method="post">
+    <input type="hidden" asp-for="InmuebleId" />
+
+    <div class="mb-3">
+        <label asp-for="FechaInicio" class="form-label"></label>
+        <input asp-for="FechaInicio" type="datetime-local" class="form-control" />
+        <span asp-validation-for="FechaInicio" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="FechaFin" class="form-label"></label>
+        <input asp-for="FechaFin" type="datetime-local" class="form-control" />
+        <span asp-validation-for="FechaFin" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Notas" class="form-label"></label>
+        <textarea asp-for="Notas" class="form-control"></textarea>
+        <span asp-validation-for="Notas" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Agendar</button>
+    <a asp-controller="Inmuebles" asp-action="Details" asp-route-id="@inmueble?.Id" class="btn btn-secondary">Cancelar</a>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

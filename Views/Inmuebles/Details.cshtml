@@ -23,5 +23,13 @@
         <a asp-controller="Visitas" asp-action="Create" asp-route-inmuebleId="@Model.Id" class="btn btn-success">
             📅 Agendar Visita
         </a>
+
+        @* Botón de Reserva solo si no hay reserva activa *@
+        @if (!Model.TieneReservaActiva) 
+        {
+            <a asp-controller="Reservas" asp-action="Create" asp-route-inmuebleId="@Model.Id" class="btn btn-warning mt-2">
+                💾 Reservar ahora (48h)
+            </a>
+        }
     </div>
 </div>

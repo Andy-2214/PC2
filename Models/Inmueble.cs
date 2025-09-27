@@ -7,7 +7,7 @@ namespace PC2.Models
         public int Id { get; set; }
 
         [Required]
-        public string Codigo { get; set; } = string.Empty; 
+        public string Codigo { get; set; } = string.Empty;
 
         [Required]
         public string Titulo { get; set; } = string.Empty;
@@ -36,5 +36,11 @@ namespace PC2.Models
         public decimal Precio { get; set; }
 
         public bool Activo { get; set; } = true;
+
+        public virtual ICollection<Reserva>? Reservas { get; set; }
+
+        public virtual ICollection<Visita>? Visitas { get; set; }
+
+        public bool TieneReservaActiva => Reservas?.Any(r => r.FechaExpiracion > DateTime.Now) ?? false;
     }
 }

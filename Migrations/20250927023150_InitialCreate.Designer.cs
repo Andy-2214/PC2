@@ -11,7 +11,7 @@ using PC2.Data;
 namespace PC2.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250927010928_InitialCreate")]
+    [Migration("20250927023150_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -159,9 +159,11 @@ namespace PC2.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
+                        .HasMaxLength(128)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ProviderKey")
+                        .HasMaxLength(128)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ProviderDisplayName")
@@ -199,9 +201,11 @@ namespace PC2.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("LoginProvider")
+                        .HasMaxLength(128)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
+                        .HasMaxLength(128)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Value")
@@ -421,7 +425,7 @@ namespace PC2.Migrations
             modelBuilder.Entity("PC2.Models.Reserva", b =>
                 {
                     b.HasOne("PC2.Models.Inmueble", null)
-                        .WithMany()
+                        .WithMany("Reservas")
                         .HasForeignKey("InmuebleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -430,10 +434,17 @@ namespace PC2.Migrations
             modelBuilder.Entity("PC2.Models.Visita", b =>
                 {
                     b.HasOne("PC2.Models.Inmueble", null)
-                        .WithMany()
+                        .WithMany("Visitas")
                         .HasForeignKey("InmuebleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("PC2.Models.Inmueble", b =>
+                {
+                    b.Navigation("Reservas");
+
+                    b.Navigation("Visitas");
                 });
 #pragma warning restore 612, 618
         }

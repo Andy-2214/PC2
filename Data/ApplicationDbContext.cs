@@ -11,7 +11,6 @@ namespace PC2.Data
         {
         }
 
-     
         public DbSet<Inmueble> Inmuebles { get; set; }
         public DbSet<Visita> Visitas { get; set; }
         public DbSet<Reserva> Reservas { get; set; }
@@ -20,24 +19,26 @@ namespace PC2.Data
         {
             base.OnModelCreating(builder);
 
-      
+            // Código único
             builder.Entity<Inmueble>()
                    .HasIndex(i => i.Codigo)
                    .IsUnique();
 
-       
+            // Relación Inmueble ↔ Visita
             builder.Entity<Visita>()
-                   .HasOne<Inmueble>()
-                   .WithMany()
-                   .HasForeignKey(v => v.InmuebleId);
+                   .HasOne<Inmueble>()                // una visita pertenece a un inmueble
+                   .WithMany(i => i.Visitas)          // un inmueble tiene muchas visitas
+                   .HasForeignKey(v => v.InmuebleId)  // clave foránea
+                   .OnDelete(DeleteBehavior.Cascade); // si eliminas el inmueble, se borran visitas
 
-          
+            // Relación Inmueble ↔ Reserva
             builder.Entity<Reserva>()
-                   .HasOne<Inmueble>()
-                   .WithMany()
-                   .HasForeignKey(r => r.InmuebleId);
+                   .HasOne<Inmueble>()                 // una reserva pertenece a un inmueble
+                   .WithMany(i => i.Reservas)          // un inmueble tiene muchas reservas
+                   .HasForeignKey(r => r.InmuebleId)   // clave foránea
+                   .OnDelete(DeleteBehavior.Cascade);  // si eliminas el inmueble, se borran reservas
 
-        
+            // Datos iniciales
             builder.Entity<Inmueble>().HasData(
                 new Inmueble { Id = 1, Codigo = "DEP-001", Titulo = "Departamento céntrico", Tipo = "Departamento", Ciudad = "Lima", Direccion = "Av. Principal 123", Dormitorios = 3, Banos = 2, MetrosCuadrados = 85, Precio = 120000, Activo = true },
                 new Inmueble { Id = 2, Codigo = "CAS-002", Titulo = "Casa con jardín", Tipo = "Casa", Ciudad = "Arequipa", Direccion = "Calle Los Olivos 456", Dormitorios = 4, Banos = 3, MetrosCuadrados = 150, Precio = 250000, Activo = true },
